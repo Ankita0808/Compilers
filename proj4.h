@@ -1,0 +1,285 @@
+#define	DATA_LINE_MAX	500
+	/* # of lines in data definition */
+#define CODE_LINE_MAX	8000
+	/* # of lines in code */
+#define DATA_MAX	10000
+	/* # of chars in data definition */
+#define CODE_MAX	100000
+	/* # of chars in code */
+
+typedef struct 
+{
+  int mode;
+	/* operand mode, see definitions below */
+  int num_const;
+	/* number constant or the offset in register displacement mode */
+  char char_const;
+	/* char constant */
+  char *ident;
+	/* identifier */
+  int reg;
+	/* register number */
+} OPERAND;	
+
+/* operand mode */
+#define NUM_CONST	50
+	/* operand is a number constant */
+#define CHAR_CONST	60
+	/* char constant */
+#define IDENTIFIER	70
+	/* operand is an identifier */
+#define REGISTER	80
+	/* operand is in a register */
+#define REG_DEFER	90
+	/* the address of operand is the content of a reg */
+#define REG_DISPL	100
+	/* the address of operand is the content of a reg + a number */
+
+/* register definition */
+#define ZERO	0	//Constant 0
+#define AT	1	//Reserved for assembler
+#define V0	2	//Expression evaluation and result of a function
+#define V1	3	//Result of a function
+#define A0	4	//Arugment 1
+#define A1	5	//Arugment 2
+#define A2	6	//Argument 3
+#define A3	7	//Argument 4
+#define T0	8	//Temporary 
+#define T1	9	//Temporary 
+#define T2	10	//Temporary 
+#define T3	11	//Temporary 
+#define T4	12	//Temporary 
+#define T5	13	//Temporary 
+#define T6	14	//Temporary 
+#define T7	15	//Temporary 
+#define S0	16	//Saved Temporary 
+#define S1	17	//Saved Temporary 
+#define S2	18	//Saved Temporary 
+#define S3	19	//Saved Temporary 
+#define S4	20	//Saved Temporary 
+#define S5	21	//Saved Temporary 
+#define S6	22	//Saved Temporary 
+#define S7	23	//Saved Temporary 
+#define T8	24	//Temporary 
+#define T9	25	//Temporary 
+#define K0	26	//Reserved for OS kernel
+#define K1	27	//Reserved for OS kernel
+#define GP	28	//Pointer to global area
+#define SP	29	//Stack pointer
+#define FP	30	//Frame pointer
+#define RA	31	//Return address 
+
+
+
+/* Arithmetic and Logic Instructions */
+#define ABS	abs	//abs Rdest, Rsrc		            --Absolute Value
+
+#define ADD	add	//add Rdest, Rsrc1, Src2 	        --Addition (with overflow)
+#define ADDI	addi	//addi Rdest, Rsrc1, Imm	--Addition Immediate (with overflow)
+#define ADDU	addu	//addu Rdest, Rsrc1, Src2	--Addition (without overflow)
+#define ADDIU	addiu	//addiu Rdest, Rsrc1, Imm	--Addition Immediate (without overflow)
+
+#define AND	and	//and Rdest, Rsrc1, Src2	        --AND
+#define ANDI	andi	//and Rdest, Rsrc1, Imm		--And Immediate
+
+#define DIV	div	//div Rsrc, Rsrc2		            --Divide(singed)
+#define	DIVU	divu	//divu Rsrc1, Rsrc2		    --Divide(unsigned)
+
+#define MUL	mul	//mul Rdest, Rsrc1, Src2	        --Multiply(without overflow)
+#define	MULO	mulo	//mulo Rdest, Rsrc1, Src2	--Multiply (with overflow)
+#define MULOU	mulou	//mulou Rdest, Rsrc1, Src2	--Unsigned Multiply (with overflow)
+#define MULT	mult	//mult Rsrc1, Rsrc2		    --Multiply
+#define MULTU	multu	//multu Rsrc1, Rsrc2		--Unsigned Multiply
+
+#define NEG	neg	//neg Rdest, Rsrc		            --Negate Value(with overflow)
+#define	NEGU	negu	//negu Rdest, Rsrc		    --Negate Value(without overflow)
+
+#define NOT	not	//not Rdest, Rsrc		            --NOT
+
+#define OR	or	//or Rdest, Rsrc1, Rsrc2	        --OR
+#define ORI	ori	//ori Rdest, Rsrc1, Imm		        --OR Immediate
+
+#define SUB	sub	//sub Rdest, Rsrc1, Rsrc2	        --Subtract (with overflow)
+#define SUBU	subu	//subu Rdest, Rsrc1, Rsrc2	--Subtract (without overflow)
+
+/* Comparision Instructions */
+#define	SEQ	seq	//seq Rdest, Rsrc1, Src2	        --Set Equal
+
+#define SGE	sge	//sge Rdest, Rsrc1, Src2            --Set Greater Than Equal
+#define SGEU	sgeu	//sgeu Rdest, Rsrc1, Src2   --Set Greater Than Equal Unsigned
+
+#define SGT	sgt	//sgt Rdest, Rsrc1, Src2            --Set Greater Than
+#define SGTU	sgtu	//sgtu Rdest, Rsrc1, Src2   --Set Greater Than Unsigned
+
+#define SLE	sle	//sle Rdest, Rsrc1, Src2            --Set Less Than Equal
+#define SLEU	sleu	//sleu Rdest, Rsrc1, Src2   --Set Less Than Equal Unsigned
+
+#define SLT	slt	//slt Rdest, Rsrc1, Src2            --Set Less Than
+#define SLTU	sltu	//sltu Rdest, Rsrc1, Src2   --Set Less Than Unsigned
+
+#define SNE	sne	//sne Rdest, Rsrc1, Src2            --Set Not Equal
+
+/* Branch and Jump Instructions */
+#define B	b	//b label1			                --Branch instruction
+
+#define BEQ	beq	//beq Rsrc1, Src2, Label	        --Branch on equal ==
+#define BEQZ	beqz	//beqz Rsrc, label		    --Branch on Equal Zero
+
+#define BGE	bge	//bge Rsrc1, Src2, label	        --Branch on Greater Than Equal >=
+#define BGEU	bgeu	//bgeu Rsrc1, Src2, label	--Branch on GTE Unsigned
+
+#define BGT	bgt	//bgt Rsrc1, Src2, label	        --Branch on Greater Than >
+#define BGTU	bgtu	//bgtu Rsrc1, Src2, label	--Branch on Greater Than  Unsigned
+
+#define BLE	ble	//ble Rsrc1, Src2, label	        --Branch on Less Than Equal <=
+#define BLEU	bleu	//bleu Rsrc1, Src2, label	--Branch on LTE Unsigned
+
+#define BLT	blt	//blt Rsrc1, Src2, label	        --Branch on Less Than Equal <
+#define BLTU	bltu	//bltu Rsrc1, Src2, label	--Branch on Less Than  Unsigned
+
+#define BNE	bne	//bne Rsrc1, Src2, label	        --Branch on Not Equal
+
+#define J	j	//j label			                -- Jump
+#define JAL	jal	//jal label			                -- Jump and Link, save the address of the next instruction in register 31, $ra
+#define JALR	jalr	//jalr Rsrc			        -- Jump and Link Register
+#define JR 	jr	//jr Rsrc			                -- Jump Register 
+
+/* Load Instructions */
+#define LI	li	//li Rdest, imm			            --Load immediate
+#define LA	la	//la Rdest, address		            --Load Address
+#define	LW	lw	//lw Rdest, address		            --Load Word
+
+/* Store Instructions */
+#define SW	sw	//sw Rsrc address		            --Store Word
+
+/* Data Movement Instructions */
+#define MOVE	move	//move Rest, Rst		    --Move
+
+/* Floating Pointer Instructions, not need for this project */
+
+/* register */
+#define R0     0
+#define R1     1
+#define R2     2
+#define R3     3
+#define R4     4
+#define R5     5
+#define R6     6
+#define R7     7
+#define R8     8
+#define R9     9
+#define R10    10
+#define R11    11
+#define AP     12
+#define FP     13
+#define SP     14
+#define PC     15
+
+/* instruction definition */
+
+/* general group */
+#define ADD    21
+#define SUB    22
+#define MUL    23
+#define DIV    24
+#define AND    25
+#define OR     26
+#define MOV    27
+#define MOVA   28
+#define PUSH   29
+#define PUSHA  30
+#define CMP    31
+#define TST    32
+
+/* brach and jump group */
+#define BEQL   40
+#define BGEQ   41
+#define BGTR   42
+#define BLEQ   43
+#define BLSS   44
+#define BNEQ   45
+#define JMP    46
+
+/* Arithmetic and Logic Instructions */
+#define ABS	47	//abs Rdest, Rsrc		        --Absolute Value
+
+#define ADD	48	//add Rdest, Rsrc1, Src2 	    --Addition (with overflow)
+#define ADDI	49	//addi Rdest, Rsrc1, Imm	--Addition Immediate (with overflow)
+#define ADDU	50	//addu Rdest, Rsrc1, Src2	--Addition (without overflow)
+#define ADDIU	51	//addiu Rdest, Rsrc1, Imm	--Addition Immediate (without overflow)
+
+#define AND	52	//and Rdest, Rsrc1, Src2	    --AND
+#define ANDI	53	//and Rdest, Rsrc1, Imm		--And Immediate
+
+#define DIV	54	//div Rsrc, Rsrc2		        --Divide(singed)
+#define	DIVU	55	//divu Rsrc1, Rsrc2		    --Divide(unsigned)
+
+#define MUL	56	//mul Rdest, Rsrc1, Src2	    --Multiply(without overflow)
+#define	MULO	57	//mulo Rdest, Rsrc1, Src2	--Multiply (with overflow)
+#define MULOU	58	//mulou Rdest, Rsrc1, Src2	--Unsigned Multiply (with overflow)
+#define MULT	59	//mult Rsrc1, Rsrc2		    --Multiply
+#define MULTU	60	//multu Rsrc1, Rsrc2		--Unsigned Multiply
+
+#define NEG	61	//neg Rdest, Rsrc		        --Negate Value(with overflow)
+#define	NEGU	62	//negu Rdest, Rsrc		    --Negate Value(without overflow)
+
+#define NOT	63	//not Rdest, Rsrc		        --NOT
+
+#define OR	64	//or Rdest, Rsrc1, Rsrc2	    --OR
+#define ORI	65	//ori Rdest, Rsrc1, Imm		    --OR Immediate
+
+#define SUB	66	//sub Rdest, Rsrc1, Rsrc2	    --Subtract (with overflow)
+#define SUBU	67	//subu Rdest, Rsrc1, Rsrc2	--Subtract (without overflow)
+
+/* Comparision Instructions */
+#define	SEQ	68	//seq Rdest, Rsrc1, Src2	    --Set Equal
+
+#define SGE	69	//sge Rdest, Rsrc1, Src2        --Set Greater Than Equal
+#define SGEU	70	//sgeu Rdest, Rsrc1, Src2   --Set Greater Than Equal Unsigned
+
+#define SGT	71	//sgt Rdest, Rsrc1, Src2        --Set Greater Than
+#define SGTU	72	//sgtu Rdest, Rsrc1, Src2   --Set Greater Than Unsigned
+
+#define SLE	73	//sle Rdest, Rsrc1, Src2        --Set Less Than Equal
+#define SLEU	74	//sleu Rdest, Rsrc1, Src2   --Set Less Than Equal Unsigned
+
+#define SLT	75	//slt Rdest, Rsrc1, Src2        --Set Less Than
+#define SLTU	76	//sltu Rdest, Rsrc1, Src2   --Set Less Than Unsigned
+
+#define SNE	77	//sne Rdest, Rsrc1, Src2        --Set Not Equal
+
+/* Branch and Jump Instructions */
+#define B	78	//b label1			            --Branch instruction
+
+#define BEQ	79	//beq Rsrc1, Src2, Label	    --Branch on equal ==
+#define BEQZ	80	//beqz Rsrc, label		    --Branch on Equal Zero
+
+#define BGE	81	//bge Rsrc1, Src2, label	    --Branch on Greater Than Equal >=
+#define BGEU	82	//bgeu Rsrc1, Src2, label	--Branch on GTE Unsigned
+
+#define BGT	83	//bgt Rsrc1, Src2, label	    --Branch on Greater Than >
+#define BGTU	84	//bgtu Rsrc1, Src2, label	--Branch on Greater Than  Unsigned
+
+#define BLE	85	//ble Rsrc1, Src2, label	    --Branch on Less Than Equal <=
+#define BLEU	86	//bleu Rsrc1, Src2, label	--Branch on LTE Unsigned
+
+#define BLT	87	//blt Rsrc1, Src2, label	    --Branch on Less Than Equal <
+#define BLTU	88	//bltu Rsrc1, Src2, label	--Branch on Less Than  Unsigned
+
+#define BNE	89	//bne Rsrc1, Src2, label	    --Branch on Not Equal
+
+#define J	90	//j label			            -- Jump
+#define JAL	91	//jal label			            -- Jump and Link, save the address of the next instruction in regiester 31, $ra
+#define JALR	92	//jalr Rsrc			        -- Jump and Link Register
+#define JR 	93	//jr Rsrc			            -- Jump Register 
+
+/* Load Instructions */
+#define LI	94	//li Rdest, imm			        --Load immediate
+#define LA	95	//la Rdest, address		        --Load Address
+#define	LW	96	//lw Rdest, address		        --Load Word
+
+/* Store Instructions */
+#define SW	97	//sw Rsrc address		        --Store Word
+
+/* Data Movement Instructions */
+#define MOVE	98	//move Rest, Rst		    --Move

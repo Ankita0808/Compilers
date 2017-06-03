@@ -1,0 +1,11 @@
+lexoutput: lex.yy.o stringtable.o
+	cc lex.yy.o stringtable.o -ll -o lexoutput
+lex.yy.o : lex.yy.c 
+	cc -c lex.yy.c 
+stringtable.o  : stringtable.c
+	cc -c stringtable.c
+lex.yy.c: lexfile.l lexheader.h
+	flex lexfile.l
+
+
+

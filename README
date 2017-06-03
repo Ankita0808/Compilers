@@ -1,0 +1,14 @@
+	Files:   lexfile.l      //input of lex
+		 stringtable.c    //hash table and string table
+                 lexheader.h    //defines token numbers
+                 Makefile   //make file
+	Executable file:
+		 lexoutput
+        Note:
+		 To run it using unix commands, follow the below steps:
+                 1. flex lexfile.l
+                 2. cc stringtable.c lex.yy.c -ll -o lexoutput
+                 3. ./lexoutput <filename
+
+  
+                 
